@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Label Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: #ffffff;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 24px;
+            color: #1d1d1f;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1d1d1f;
+            border-bottom: 2px solid #007aff;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #1d1d1f;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007aff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0051d5;
+        }
+
+        .btn-secondary {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8ed;
+        }
+
+        .btn-print {
+            background: #34c759;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-print:hover {
+            background: #2da84a;
+        }
+
+        /* Label Preview */
+        .label-preview {
+            background: #ffffff;
+            padding: 24px;
+            display: none;
+        }
+
+        .label-preview.active {
+            display: block;
+        }
+
+        .label {
+            border: 3px solid #1d1d1f;
+            padding: 32px;
+            background: white;
+            position: relative;
+        }
+
+        .label-section {
+            margin-bottom: 32px;
+        }
+
+        .label-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .label-header {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #86868b;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .label-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+        }
+
+        .label-phone {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+        }
+
+        .label-address {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #1d1d1f;
+            white-space: pre-line;
+        }
+
+        .divider {
+            border: none;
+            border-top: 2px dashed #d2d2d7;
+            margin: 24px 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                size: A5 portrait;
+                margin: 0;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .form-card, .button-group, .subtitle {
+                display: none !important;
+            }
+
+            .label-preview {
+                display: block !important;
+                padding: 0;
+                margin: 0;
+                background: white;
+                border-radius: 0;
+                height: 210mm;
+                width: 148mm;
+            }
+
+            .label {
+                border: 3px solid black;
+                page-break-after: avoid;
+                margin: 0;
+                height: 70mm;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+
+            .label-section {
+                margin-bottom: 0;
+            }
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <h1>Shipping Label</h1>
+
+            <div class="section-title">Recipient Details</div>
+            <div class="form-group">
+                <label for="toName">Name</label>
+                <input type="text" id="toName">
+            </div>
+            <div class="form-group">
+                <label for="toPhone">Phone</label>
+                <input type="tel" id="toPhone">
+            </div>
+            <div class="form-group">
+                <label for="toAddress">Address</label>
+                <textarea id="toAddress"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="clearForm()">Clear</button>
+                <button class="btn-primary" onclick="generateLabel()">Generate Label</button>
+            </div>
+        </div>
+
+        <div class="label-preview" id="labelPreview">
+            <div class="label">
+                <div class="label-section">
+                    <div class="label-header">Ship To</div>
+                    <div class="label-name" id="previewToName"></div>
+                    <div class="label-phone" id="previewToPhone"></div>
+                    <div class="label-address" id="previewToAddress"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="editLabel()">Edit</button>
+                <button type="button" class="btn-print" onclick="printLabel()">🖨️ Print Label</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load saved details on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            checkURLParams();
+        });
+
+        function generateLabel() {
+            const toName = document.getElementById('toName').value;
+            const toPhone = document.getElementById('toPhone').value;
+            const toAddress = document.getElementById('toAddress').value;
+
+            if (!toName || !toAddress) {
+                alert('Please fill in at least the recipient name and address');
+                return;
+            }
+
+            document.getElementById('previewToName').textContent = toName;
+            document.getElementById('previewToPhone').textContent = toPhone || '—';
+            document.getElementById('previewToAddress').textContent = toAddress;
+
+            document.querySelector('.form-card').style.display = 'none';
+            document.getElementById('labelPreview').classList.add('active');
+        }
+
+        function editLabel() {
+            document.querySelector('.form-card').style.display = 'block';
+            document.getElementById('labelPreview').classList.remove('active');
+        }
+
+        function printLabel() {
+            console.log('Print button clicked');
+            
+            // Try to print
+            const printed = window.print();
+            
+            // If print didn't work, show instructions
+            setTimeout(function() {
+                if (!window.matchMedia('print').matches) {
+                    alert('Please use your browser menu: File → Print (or Cmd+P) to print the label.');
+                }
+            }, 500);
+        }
+
+        function clearForm() {
+            document.getElementById('toName').value = '';
+            document.getElementById('toPhone').value = '';
+            document.getElementById('toAddress').value = '';
+        }
+
+        // Check for URL parameters (for Shortcuts integration)
+        function checkURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.has('toName')) {
+                document.getElementById('toName').value = params.get('toName') || '';
+                document.getElementById('toPhone').value = params.get('toPhone') || '';
+                document.getElementById('toAddress').value = params.get('toAddress') || '';
+                
+                // Auto-generate if all required fields are present
+                if (params.get('toName') && params.get('toAddress')) {
+                    setTimeout(generateLabel, 100);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
