@@ -132,7 +132,7 @@
         }
 
         .label {
-            border: 3px solid #1d1d1f;
+            border: none;
             padding: 32px;
             background: white;
             position: relative;
@@ -150,29 +150,31 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            color: #86868b;
+            color: #1d1d1f;
             margin-bottom: 8px;
             letter-spacing: 0.5px;
         }
 
         .label-name {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 6px;
             color: #1d1d1f;
         }
 
         .label-phone {
             font-size: 16px;
-            margin-bottom: 6px;
+            margin-bottom: 12px;
             color: #1d1d1f;
         }
 
         .label-address {
-            font-size: 18px;
-            line-height: 1.5;
+            font-size: 24px;
+            line-height: 1.4;
             color: #1d1d1f;
             white-space: pre-line;
+            font-weight: 600;
+            margin-bottom: 16px;
         }
 
         .divider {
@@ -209,11 +211,11 @@
             }
 
             .label {
-                border: 3px solid black;
+                border: none;
                 page-break-after: avoid;
                 margin: 0;
                 height: 70mm;
-                padding: 20px;
+                padding: 30px;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
@@ -269,10 +271,9 @@
         <div class="label-preview" id="labelPreview">
             <div class="label">
                 <div class="label-section">
-                    <div class="label-header">Ship To</div>
+                    <div class="label-address" id="previewToAddress"></div>
                     <div class="label-name" id="previewToName"></div>
                     <div class="label-phone" id="previewToPhone"></div>
-                    <div class="label-address" id="previewToAddress"></div>
                 </div>
             </div>
 
